@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://pesto.tech/">
+    <img alt="PESTO" src="https://www.pesto.tech/assets/pestoblack.svg" width="500">
+  </a>
+</p>
+
 # Day 8
 
 There are separate branches for Segment 1 and Segment 2 in this repository. Both segments include two things:
