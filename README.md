@@ -1,4 +1,4 @@
 # Day 8
 
-- Complete all the questions so thal all the tests pass.
+- Complete all the questions so that all the tests pass.
 
