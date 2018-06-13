@@ -221,7 +221,7 @@ describe('toPairs', () => {
   });
 
   it("only iterates the object's own properties", () => {
-    const F = () => {
+    const F = function () {
       this.x = 1;
       this.y = 2;
     };
