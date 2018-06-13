@@ -10,6 +10,7 @@
   },
 };
 */
+/*eslint-disable*/
 function onChange(objToWatch, onChangeFunction) {
   const handler = {
     get(target, property, receiver) {
@@ -83,10 +84,10 @@ const proxyIterable = () => {};
 function knownProp(obj) {
   const handler = {
     get(target, key) {
-      if (obj.has(key)) {
+      if (obj.hasOwnProperty(key)) {
         return true;
       }
-      return undefined;
+      throw new TypeError();
     },
   };
   return new Proxy(obj, handler);
