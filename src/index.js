@@ -21,7 +21,25 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(obj, fn) {
+  const handler = {
+    get(target, keyName) {
+      fn();
+
+      const value = Reflect.get(target, keyName);
+      if (typeof value === 'object') {
+        return new Proxy(value, handler);
+      }
+      return Reflect.get(target, keyName, value);
+    },
+    set(target, keyName, value) {
+      fn();
+      return Reflect.set(target, keyName, value);
+    },
+  };
+  const proxy = new Proxy(obj, handler);
+  return proxy;
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -46,7 +64,9 @@ function onChange() {}
   x.i;
   //=> 8
 */
-const proxyIterable = () => {};
+const proxyIterable = () => {
+
+};
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
   const obj = {foo: true};
@@ -60,7 +80,18 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(obj) {
+  const handler = {
+    get(target, keyName, receiver) {
+      if (!(keyName in target)) {
+        throw new TypeError(`Unknown property: ${keyName}`);
+      }
+      return Reflect.get(target, keyName, receiver);
+    },
+  };
+  const proxy = new Proxy(obj, handler);
+  return proxy;
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 

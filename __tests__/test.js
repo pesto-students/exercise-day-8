@@ -32,6 +32,7 @@ describe('onChange', () => {
     Object.defineProperty(object, 'newProp', {
       value: '🦄',
     });
+
     expect(callCount).toBe(2);
 
     Object.assign(object, {
@@ -177,7 +178,7 @@ describe('knownProp', () => {
   });
 });
 
-describe('negativeIndex', () => {
+describe.only('negativeIndex', () => {
   test('behaves like an array', () => {
     const fixture = negativeIndex(['foo', 'bar', 'baz']);
     expect(fixture.length).toBe(3);
