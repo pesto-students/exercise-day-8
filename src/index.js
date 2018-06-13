@@ -21,8 +21,8 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(list) {
+  return [...(new Set(list))];
 }
 
 /** Q3. (*)
@@ -32,8 +32,8 @@ function uniq() {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(list1, list2) {
+  return uniq([...list1, ...list2]);
 }
 
 /** Q4.
@@ -77,7 +77,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -294,13 +294,22 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let i = 0;
+  while (i < 5) {
+    i += 1;
+    yield i;
+  }
 }
 
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
     // implement fibonacci
+    let [current, next] = [1, 2];
+    while (true) {
+      yield current;
+      [current, next] = [next, current + next];
+    }
   },
 };
 
