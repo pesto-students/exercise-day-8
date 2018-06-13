@@ -327,6 +327,14 @@ function* generatorIterable() {
 const fibonacci = {
   * [Symbol.iterator]() {
     // implement fibonacci
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const c = a + b;
+      yield c;
+      a = b;
+      b = c;
+    }
   },
 };
 
