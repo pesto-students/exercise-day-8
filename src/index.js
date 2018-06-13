@@ -269,8 +269,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(a, b, list) {
+  return list.slice(a, b);
 }
 
 
@@ -289,7 +289,9 @@ function slice(input) {
  */
 
 function searchSortedMatrix(input) {
-  return input;
+  // const m = input.search;
+  const result = input.matrix.find(ele => ele === input.search);
+  return (result !== -1);
 }
 
 /* Q16 (*)
