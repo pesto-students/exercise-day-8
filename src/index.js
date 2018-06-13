@@ -21,7 +21,15 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(fixture, callcountFunc) {
+  const handler = {
+    get(obj, property) {
+      callcountFunc();
+      return obj[property];
+    },
+  };
+  return new Proxy(fixture, handler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -69,7 +77,20 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex(arr) {
+  const handler = {
+    get(target, property) {
+      if (property === 'length') {
+        return target.length;
+      }
+      if (property === 'toString') {
+        return target.toString();
+      }
+      return Reflect.get(target, property);
+    },
+  };
+  return new Proxy(arr, handler);
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
