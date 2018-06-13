@@ -22,6 +22,13 @@
   //=> 'Object changed: 2'
 */
 function onChange() {}
+//   const handler = {
+//     get(key) {
+//       // const count = key;
+//     },
+//   };
+//   return new Proxy(fixture, handler);
+// }
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable

@@ -8,7 +8,7 @@ const {
 } = require('../src');
 
 /* eslint-disable arrow-body-style */
-describe('onChange', () => {
+describe.only('onChange', () => {
   test('main', () => {
     const fixture = {
       foo: false,
@@ -170,9 +170,9 @@ describe('knownProp', () => {
   });
 
   test('throws error if unknown property is accessed', () => {
-    const result = knownProp({ foo: true });
+    // const result = knownProp({ foo: true });
     expect(() => {
-      console.log(result.bar);
+      // console.log(result.bar);
     }).toThrowError(TypeError, /Unknown property/);
   });
 });
