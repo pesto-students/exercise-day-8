@@ -21,7 +21,13 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(objTowatch, _onChangeFunction) {
+  const handler = {
+    get(target, property, _reciever) {
+      onChange();
+    },
+  };
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
