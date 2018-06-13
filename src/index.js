@@ -21,8 +21,9 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(list3) {
+  const ulist = [...new Set([...list3])];
+  return ulist;
 }
 
 /** Q3. (*)
@@ -32,8 +33,9 @@ function uniq() {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(a, b) {
+  const uni = [...new Set([...a, ...b])];
+  return uni;
 }
 
 /** Q4.
@@ -266,8 +268,9 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(a, b, input) {
+  const arr2 = input.slice(a, b);
+  return arr2;
 }
 
 
