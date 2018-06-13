@@ -316,7 +316,11 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let counter = 1;
+  while (counter <= 5) {
+    yield counter;
+    counter += 1;
+  }
 }
 
 // Q16 (*)
