@@ -79,7 +79,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -95,7 +95,9 @@ function toUpper1(params) {
  */
 
 function toPairs(params) {
-  return params;
+  let d = [];
+  d = params;
+  return Array.entries(d);
 }
 
 
@@ -241,9 +243,13 @@ function kungfoo(input) {
  */
 
 function cipher(str) {
-  return str;
+  let vb = [];
+  for (let i = 0; i < str.length; i += 1) {
+    const vr = [];
+    vb = vr;
+  }
+  return vb;
 }
-
 /** Q13. (*)
  * Splits a collection into slices of the specified length.
  *

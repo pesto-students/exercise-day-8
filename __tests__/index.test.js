@@ -215,7 +215,7 @@ describe('tiles', () => {
   });
 });
 
-describe('toPairs', () => {
+describe.only('toPairs', () => {
   it('converts an object into an array of two-element [key, value] arrays', () => {
     expect(toPairs({ a: 1, b: 2, c: 3 })).toEqual([['a', 1], ['b', 2], ['c', 3]]);
   });
@@ -322,7 +322,7 @@ describe('uncurryN', () => {
   });
 });
 
-describe('union', () => {
+describe.only('union', () => {
   const M = [1, 2, 3, 4];
   const N = [3, 4, 5, 6];
   it('combines two lists into the set of all their elements', () => {
