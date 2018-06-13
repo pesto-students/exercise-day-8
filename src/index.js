@@ -21,7 +21,26 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(obj, func) {
+  const handler = {
+    get(obj1, key) {
+      func();
+      return obj1[key];
+    },
+    defineProperty() {
+      func();
+      return true;
+    },
+    deleteProperty() {
+      func();
+    },
+    set(obj1, key, value) {
+      func();
+      return Reflect.set(obj1, key, value);
+    },
+  };
+  return new Proxy(obj, handler);
+}
 //   const handler = {
 //     get(key) {
 //       // const count = key;

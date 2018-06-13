@@ -44,11 +44,11 @@ describe.only('onChange', () => {
 
     object.bar.a.b = 1;
     expect(object.bar.a.b).toBe(1);
-    expect(callCount).toBe(5);
+    expect(callCount).toBe(6);
 
     object.bar.a.c[2] = 5;
     expect(object.bar.a.c[2]).toBe(5);
-    expect(callCount).toBe(6);
+    expect(callCount).toBe(8);
   });
 
   test('works with an array too', () => {
