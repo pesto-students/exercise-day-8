@@ -1,27 +1,48 @@
-/* Q1: Use ES6 Proxy to implement the following function
-  const object = {
-    foo: false,
-    a: {
-      b: [
-        {
-          c: false
-        }
-      ]
-    }
-  };
-
-  let i = 0;
-  const watchedObject = onChange(object, () => {
-    console.log('Object changed:', ++i);
-  });
-
-  watchedObject.foo = true;
-  //=> 'Object changed: 1'
-
-  watchedObject.a.b[0].c = true;
-  //=> 'Object changed: 2'
+/* Q1: Use ES6 Proxy to implement the following function */
+/* const object = {
+  foo: false,
+  a: {
+    b: [
+      {
+        c: false,
+      },
+    ],
+  },
+};
 */
-function onChange() {}
+/*eslint-disable*/
+function onChange(objToWatch, onChangeFunction) {
+  const handler = {
+    get(target, property, receiver) {
+      onChangeFunction();
+      const value = Reflect.get(target, property, receiver);
+      if (typeof value === 'object') {
+        return new Proxy(value, handler);
+      }
+      return value;
+    },
+    set(target, property, value) {
+      onChangeFunction();
+      return Reflect.set(target, property, value);
+    },
+    deleteProperty(target, property) {
+      onChangeFunction();
+      return Reflect.deleteProperty(target, property);
+    },
+  };
+  return new Proxy(objToWatch, handler);
+}
+/*
+const i = 0;
+const watchedObject = onChange(object, () => i + 1);
+
+ watchedObject.foo = true;
+//= > 'Object changed: 1'
+
+watchedObject.a.b[0].c = true;
+//= > 'Object changed: 2'
+*/
+
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -60,7 +81,17 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(obj) {
+  const handler = {
+    get(target, key) {
+      if (obj.hasOwnProperty(key)) {
+        return true;
+      }
+      throw new TypeError();
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
@@ -69,7 +100,11 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex() {
+
+
+}
+
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
