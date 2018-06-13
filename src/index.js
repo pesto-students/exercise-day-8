@@ -289,6 +289,21 @@ function searchSortedMatrix(input) {
   return input;
 }
 
+/* Q16 (*)
+Create an iterable using generator function.
+It should have the same functionality as the one in question 1
+*/
+function* generatorIterable() {
+  yield 'abc';
+}
+
+// Q16 (*)
+const fibonacci = {
+  * [Symbol.iterator]() {
+    // implement fibonacci
+  },
+};
+
 module.exports = {
   searchSortedMatrix,
   slice,
@@ -305,4 +320,6 @@ module.exports = {
   union,
   uniq,
   unnest,
+  generatorIterable,
+  fibonacci,
 };
