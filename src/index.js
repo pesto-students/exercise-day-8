@@ -286,7 +286,10 @@ function slice(input) {
  */
 
 function searchSortedMatrix(input) {
-  return input;
+  const { search, matrix } = input;
+  const linearArray = matrix.reduce((final, item) => [...final, ...item]);
+  if (search in linearArray) { return true; }
+  return false;
 }
 
 /* Q16 (*)
