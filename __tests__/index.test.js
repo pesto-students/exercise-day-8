@@ -114,7 +114,7 @@ describe('searchSortedMatrix', () => {
 describe('slice', () => {
   it('retrieves the proper sublist of a list', () => {
     const list = [8, 6, 7, 5, 3, 0, 9];
-    expect(slice(2, 5, list)).toBe([7, 5, 3]);
+    expect(slice(2, 5, list)).toEqual([7, 5, 3]);
   });
 
   it('can operate on strings', () => {
@@ -215,7 +215,7 @@ describe('tiles', () => {
   });
 });
 
-describe('toPairs', () => {
+describe.only('toPairs', () => {
   it('converts an object into an array of two-element [key, value] arrays', () => {
     expect(toPairs({ a: 1, b: 2, c: 3 })).toEqual([['a', 1], ['b', 2], ['c', 3]]);
   });

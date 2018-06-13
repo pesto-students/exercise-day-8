@@ -7,8 +7,8 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
-
+function unnest(arr) {
+  return arr;
 }
 
 
@@ -20,9 +20,11 @@ function unnest() {
  *   uniq([1, '1']);     //=> [1, '1']
  *   uniq([[42], [42]]); //=> [[42]]
  */
-
 function uniq() {
-
+  const newArray = [];
+  // const freq = [...arr];
+  newArray.push();
+  return newArray;
 }
 
 /** Q3. (*)
@@ -33,7 +35,9 @@ function uniq() {
  */
 
 function union() {
-
+  // const arr = [];
+  // arr1.some(arr1.filter(elm => elm !==));
+  // return arr1;
 }
 
 /** Q4.
@@ -77,7 +81,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -93,6 +97,11 @@ function toUpper1(params) {
  */
 
 function toPairs(params) {
+  // const iterator = {
+  //   [Symbol.iterator]() {
+  //     return this;
+  //   },
+  //     }
   return params;
 }
 
