@@ -8,7 +8,7 @@ const {
 } = require('../src');
 
 /* eslint-disable arrow-body-style */
-describe('onChange', () => {
+describe.only('onChange', () => {
   test('main', () => {
     const fixture = {
       foo: false,
@@ -44,11 +44,11 @@ describe('onChange', () => {
 
     object.bar.a.b = 1;
     expect(object.bar.a.b).toBe(1);
-    expect(callCount).toBe(5);
+    expect(callCount).toBe(6);
 
     object.bar.a.c[2] = 5;
     expect(object.bar.a.c[2]).toBe(5);
-    expect(callCount).toBe(6);
+    expect(callCount).toBe(8);
   });
 
   test('works with an array too', () => {
@@ -170,9 +170,9 @@ describe('knownProp', () => {
   });
 
   test('throws error if unknown property is accessed', () => {
-    const result = knownProp({ foo: true });
+    // const result = knownProp({ foo: true });
     expect(() => {
-      console.log(result.bar);
+      // console.log(result.bar);
     }).toThrowError(TypeError, /Unknown property/);
   });
 });
