@@ -212,7 +212,7 @@ describe('negativeIndex', () => {
   });
 });
 
-describe.only('setDefaultProperty', () => {
+describe('setDefaultProperty', () => {
   test('returns the value if known property is accessed', () => {
     const object1 = setDefaultProperty({ foo: 'bar' }, 'defaultValue');
     expect(object1.foo).toBe('bar');
