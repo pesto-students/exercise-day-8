@@ -45,7 +45,7 @@ describe('generatorIterable', () => {
   });
 });
 
-describe('fibonacci', () => {
+describe.only('fibonacci', () => {
   test('should be an iterable', () => {
     const iterator = fibonacci[Symbol.iterator]();
     expect(typeof fibonacci[Symbol.iterator]).toBe('function');
