@@ -65,7 +65,6 @@ function onChange(obj, fn) {
   //=> 8
 */
 const proxyIterable = () => {
-
 };
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
