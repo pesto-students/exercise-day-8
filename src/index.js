@@ -286,7 +286,9 @@ function slice(input) {
  */
 
 function searchSortedMatrix(input) {
-  return input;
+  const { search, matrix } = input;
+  const linearArray = matrix.reduce((final, item) => [...final, ...item], []);
+  return !!linearArray.find(item => item === search);
 }
 
 /* Q16 (*)
