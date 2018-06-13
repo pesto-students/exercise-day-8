@@ -1,4 +1,6 @@
 const {
+  generatorIterable,
+  fibonacci,
   searchSortedMatrix,
   slice,
   splitEvery,
@@ -15,6 +17,58 @@ const {
   uniq,
   unnest,
 } = require('../src/index');
+
+describe('generatorIterable', () => {
+  test('should be a generator function', () => {
+    expect(generatorIterable.constructor.name).toBe('GeneratorFunction');
+  });
+
+  test('iterator.next returns an object with value and done properties', () => {
+    const iterable = generatorIterable();
+    const iterator = iterable[Symbol.iterator]();
+    expect(iterator.next()).toEqual({
+      value: 1,
+      done: false,
+    });
+  });
+
+  test('iteration should finish after value is 5', () => {
+    const iterable = generatorIterable();
+    const iterator = iterable[Symbol.iterator]();
+    let value = iterator.next(); // 1
+    value = iterator.next(); // 2
+    value = iterator.next(); // 3
+    value = iterator.next(); // 4
+    value = iterator.next(); // 5
+    expect(value).toEqual({ value: 5, done: false });
+    expect(iterator.next()).toEqual({ value: undefined, done: true });
+  });
+});
+
+describe('fibonacci', () => {
+  test('should be an iterable', () => {
+    const iterator = fibonacci[Symbol.iterator]();
+    expect(typeof fibonacci[Symbol.iterator]).toBe('function');
+    expect(typeof iterator.next).toBe('function');
+    expect(iterator.next()).toHaveProperty('value');
+    expect(iterator.next()).toHaveProperty('done');
+  });
+
+  test('should return fibonacci series', () => {
+    const iterator = fibonacci[Symbol.iterator]();
+    expect(iterator.next().value).toBe(1);
+    expect(iterator.next().value).toBe(2);
+    expect(iterator.next().value).toBe(3);
+    expect(iterator.next().value).toBe(5);
+    expect(iterator.next().value).toBe(8);
+    expect(iterator.next().value).toBe(13);
+    expect(iterator.next().value).toBe(21);
+    expect(iterator.next().value).toBe(34);
+    expect(iterator.next().value).toBe(55);
+    expect(iterator.next().value).toBe(89);
+    expect(iterator.next().value).toBe(144);
+  });
+});
 
 describe('searchSortedMatrix', () => {
   test('should implement the function correctly', () => {
@@ -167,7 +221,7 @@ describe('toPairs', () => {
   });
 
   it("only iterates the object's own properties", () => {
-    const F = () => {
+    const F = function () {
       this.x = 1;
       this.y = 2;
     };
