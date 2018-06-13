@@ -8,7 +8,7 @@ const {
 } = require('../src');
 
 /* eslint-disable arrow-body-style */
-describe('onChange', () => {
+describe.only('onChange', () => {
   test('main', () => {
     const fixture = {
       foo: false,
