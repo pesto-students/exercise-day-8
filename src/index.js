@@ -66,7 +66,7 @@ function knownProp(target) {
       if (!(key in tar)) {
         throw new TypeError('Unknown property');
       }
-      return target;
+      return target[key];
     },
   };
 
