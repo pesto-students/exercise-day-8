@@ -77,7 +77,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -266,8 +266,12 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(a, b, input) {
+  if (typeof input === 'string') {
+    return input.slice(a, b);
+  }
+  const arr1 = input.slice(a, b);
+  return arr1;
 }
 
 
