@@ -99,7 +99,34 @@ function knownProp(obj) {
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex(arr) {
+  const handler = {
+    get(target, index) {
+      if (index < 0) {
+        return Reflect.get(target, (target.length + +index));
+      }
+      return Reflect.get(target, index);
+    },
+    set(target, index, val) {
+      const tempArr = [...target];
+
+      let currentIndex;
+      if (index < 0) {
+        currentIndex = (target.length + +index);
+      } else {
+        currentIndex = +index;
+      }
+      tempArr[currentIndex] = val;
+      return tempArr;
+    },
+  };
+
+  if (arr.length) {
+    const proxy = new Proxy(arr, handler);
+    return proxy;
+  }
+  throw new TypeError('Only arrays are supported.');
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
@@ -108,7 +135,18 @@ function negativeIndex() {}
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(obj, defaultVal) {
+  const handler = {
+    get(target, keyName, receiver) {
+      if (!(keyName in target)) {
+        return defaultVal;
+      }
+      return Reflect.get(target, keyName, receiver);
+    },
+  };
+  const proxy = new Proxy(obj, handler);
+  return proxy;
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.

@@ -178,7 +178,7 @@ describe('knownProp', () => {
   });
 });
 
-describe.only('negativeIndex', () => {
+describe('negativeIndex', () => {
   test('behaves like an array', () => {
     const fixture = negativeIndex(['foo', 'bar', 'baz']);
     expect(fixture.length).toBe(3);
@@ -212,7 +212,7 @@ describe.only('negativeIndex', () => {
   });
 });
 
-describe('setDefaultProperty', () => {
+describe.only('setDefaultProperty', () => {
   test('returns the value if known property is accessed', () => {
     const object1 = setDefaultProperty({ foo: 'bar' }, 'defaultValue');
     expect(object1.foo).toBe('bar');
