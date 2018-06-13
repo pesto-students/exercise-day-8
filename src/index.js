@@ -46,7 +46,17 @@ function onChange() {}
   x.i;
   //=> 8
 */
-const proxyIterable = () => {};
+// const proxyIterable = (arr) => {
+//   const x = {
+//     increment(inc) {
+//       arr.map((x) => {
+//         const y = x + inc;
+//         return y;
+//       });
+//       return arr;
+//     }
+//   },
+// }
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
   const obj = {foo: true};
@@ -60,7 +70,18 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(target) {
+  const handler = {
+    get(tar, key) {
+      if (!(key in tar)) {
+        return target;
+      }
+      throw new TypeError('Unknown property');
+    },
+  };
+  const proxy = new Proxy(target, handler);
+  return proxy;
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
@@ -78,7 +99,18 @@ function negativeIndex() {}
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(target, defaultValue) {
+  const handler = {
+    get(tar, key) {
+      if (!(key in tar)) {
+        return defaultValue;
+      }
+      return tar[key];
+    },
+  };
+  const proxy = new Proxy(target, handler);
+  return proxy;
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
@@ -94,7 +126,7 @@ function privateProps() {}
 
 module.exports = {
   onChange,
-  proxyIterable,
+  // proxyIterable,
   knownProp,
   negativeIndex,
   setDefaultProperty,
