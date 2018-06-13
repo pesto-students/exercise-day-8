@@ -21,8 +21,8 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(list) {
+  return [...(new Set(list))];
 }
 
 /** Q3. (*)
@@ -32,8 +32,8 @@ function uniq() {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(list1, list2) {
+  return uniq([...list1, ...list2]);
 }
 
 /** Q4.
@@ -77,7 +77,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
