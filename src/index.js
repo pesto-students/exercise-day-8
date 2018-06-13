@@ -21,8 +21,10 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(input) {
+  const resultSet = new Set(input);
+  console.log(resultSet);
+  return Array.from(resultSet);
 }
 
 /** Q3. (*)
@@ -205,7 +207,27 @@ function sumable(input) {
  */
 
 function kungfoo(input) {
-  return input;
+  if (input.n === 0) {
+    const result = input.x + input.y;
+    return result;
+  }
+  if (input.y === 0) {
+    return input.x;
+  }
+  return kungfoo({
+    n: input.n - 1,
+    x: kungfoo({
+      n: input.n,
+      x: input.x,
+      y: input.y - 1,
+    }),
+    y: (kungfoo({
+      n: input.n,
+      x: input.x,
+      y: input.y - 1,
+    }) + input.y),
+
+  });
 }
 
 /** Q12. (*)
@@ -266,8 +288,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(start, end, input) {
+  return input.slice(start, end);
 }
 
 
