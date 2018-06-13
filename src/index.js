@@ -21,8 +21,16 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(input) {
+  const m = new Map();
+  const arr1 = input.filter((val) => {
+    if (m.get(val) === undefined) {
+      m.set(val, 0);
+      return val;
+    }
+    return true;
+  });
+  return arr1;
 }
 
 /** Q3. (*)
@@ -66,8 +74,23 @@ function uncurryN() {
  *      R.type(undefined); //=> "Undefined"
  */
 
-function type() {
-
+function type(input) {
+  if (typeof input === 'object') {
+    return 'Object';
+  }
+  if (typeof input === 'number') {
+    return 'Number';
+  }
+  if (typeof input === 'undefined') {
+    return 'Undefined';
+  }
+  if (typeof input === 'string') {
+    return 'String';
+  }
+  if (input === null) {
+    return 'Null';
+  }
+  return true;
 }
 
 /** Q6. (*)
@@ -307,27 +330,15 @@ function* generatorIterable() {
 
 // Q16 (*)
 const fibonacci = {
-  [Symbol.iterator]() {
-    let a = 1;
-    let b = 2;
-    let newValue = 0;
-    let count = 0;
-    const iterator = {
-      next() {
-        count += 1;
-        if (count === 1) {
-          return { value: a, done: true };
-        }
-        if (count === 2) {
-          return { value: b, done: true };
-        }
-        newValue = a + b;
-        a = b;
-        b = newValue;
-        return { value: newValue, done: true };
-      },
-    };
-    return iterator;
+  * [Symbol.iterator]() {
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const c = a + b;
+      a = b;
+      b = c;
+      yield c;
+    }
   },
 };
 
