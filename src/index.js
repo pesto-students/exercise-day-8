@@ -7,10 +7,10 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
-
+function unnest(arr) {
+  const result = arr.reduce((acc, cur) => acc.concat(cur), []);
+  return result;
 }
-
 
 /** Q2. (*)
  * Returns a new list containing only one copy of each element in the original
@@ -21,8 +21,11 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(list) {
+  // const arr2 = list.reduce(() => {});
+  const set = new Set(list);
+  const result = [...set];
+  return result;
 }
 
 /** Q3. (*)
@@ -266,8 +269,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(a, b, list) {
+  return list.slice(a, b);
 }
 
 
@@ -286,7 +289,9 @@ function slice(input) {
  */
 
 function searchSortedMatrix(input) {
-  return input;
+  // const m = input.search;
+  const result = input.matrix.find(ele => ele === input.search);
+  return (result !== -1);
 }
 
 /* Q16 (*)
@@ -294,13 +299,24 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let i = 1;
+  while (i <= 5) {
+    yield i;
+    i += 1;
+  }
 }
 
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
     // implement fibonacci
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const c = a + b;
+      a = b; b = c;
+      yield c;
+    }
   },
 };
 

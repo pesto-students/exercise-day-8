@@ -111,10 +111,10 @@ describe('searchSortedMatrix', () => {
   });
 });
 
-describe('slice', () => {
+describe.only('slice', () => {
   it('retrieves the proper sublist of a list', () => {
     const list = [8, 6, 7, 5, 3, 0, 9];
-    expect(slice(2, 5, list)).toBe([7, 5, 3]);
+    expect(slice(2, 5, list)).toEqual([7, 5, 3]);
   });
 
   it('can operate on strings', () => {
