@@ -23,6 +23,7 @@
 */
 function onChange() {}
 
+
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
 
