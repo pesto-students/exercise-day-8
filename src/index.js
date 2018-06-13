@@ -294,13 +294,36 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let count = 0;
+  while (count <= 4) {
+    count += 1;
+    yield count;
+  }
 }
 
 // Q16 (*)
 const fibonacci = {
-  * [Symbol.iterator]() {
-    // implement fibonacci
+  [Symbol.iterator]() {
+    let a = 1;
+    let b = 2;
+    let newValue = 0;
+    let count = 0;
+    const iterator = {
+      next() {
+        count += 1;
+        if (count === 1) {
+          return { value: a, done: true };
+        }
+        if (count === 2) {
+          return { value: b, done: true };
+        }
+        newValue = a + b;
+        a = b;
+        b = newValue;
+        return { value: newValue, done: true };
+      },
+    };
+    return iterator;
   },
 };
 
