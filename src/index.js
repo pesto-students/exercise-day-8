@@ -249,8 +249,19 @@ function cipher(str) {
  *     splitEvery(3, 'foobarbaz'); //=> ['foo', 'bar', 'baz']
  */
 
-function splitEvery(n, list) {
-  return n + list;
+function splitEvery(chunk, list) {
+  if (list.length > 0) {
+    return [...list].reduce((resultArray, item, index) => {
+      const chunkIndex = Math.floor(index / chunk);
+      const tempArray = resultArray;
+      if (!tempArray[chunkIndex]) {
+        tempArray[chunkIndex] = [];
+      }
+      tempArray[chunkIndex].push(item);
+      return tempArray;
+    }, []);
+  }
+  return list;
 }
 
 
@@ -266,8 +277,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(fromIndex, toIndex, arr) {
+  return arr.slice(fromIndex, toIndex);
 }
 
 

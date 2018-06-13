@@ -111,10 +111,10 @@ describe('searchSortedMatrix', () => {
   });
 });
 
-describe.only('slice', () => {
+describe('slice', () => {
   it('retrieves the proper sublist of a list', () => {
     const list = [8, 6, 7, 5, 3, 0, 9];
-    expect(slice(2, 5, list)).toBe([7, 5, 3]);
+    expect(slice(2, 5, list)).toEqual([7, 5, 3]);
   });
 
   it('can operate on strings', () => {
@@ -141,7 +141,7 @@ describe.only('slice', () => {
   });
 });
 
-describe('splitEvery', () => {
+describe.only('splitEvery', () => {
   it('splits a collection into slices of the specified length', () => {
     expect(splitEvery(1, [1, 2, 3, 4])).toEqual([[1], [2], [3], [4]]);
     expect(splitEvery(2, [1, 2, 3, 4])).toEqual([[1, 2], [3, 4]]);
