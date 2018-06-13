@@ -21,7 +21,15 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(fixture, callcountFunc) {
+  const handler = {
+    get(obj, property) {
+      callcountFunc();
+      return obj[property];
+    },
+  };
+  return new Proxy(fixture, handler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
