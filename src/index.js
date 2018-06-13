@@ -77,7 +77,20 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex(arr) {
+  const handler = {
+    get(target, property) {
+      if (property === 'length') {
+        return target.length;
+      }
+      if (property === 'toString') {
+        return target.toString();
+      }
+      return Reflect.get(target, property);
+    },
+  };
+  return new Proxy(arr, handler);
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
