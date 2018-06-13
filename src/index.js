@@ -74,9 +74,9 @@ function knownProp(target) {
   const handler = {
     get(tar, key) {
       if (!(key in tar)) {
-        return target;
+        throw new TypeError('Unknown property');
       }
-      throw new TypeError('Unknown property');
+      return target[key];
     },
   };
   const proxy = new Proxy(target, handler);
