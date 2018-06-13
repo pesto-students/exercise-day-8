@@ -32,6 +32,7 @@ describe('onChange', () => {
     Object.defineProperty(object, 'newProp', {
       value: '🦄',
     });
+
     expect(callCount).toBe(2);
 
     Object.assign(object, {
