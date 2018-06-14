@@ -141,7 +141,7 @@ describe('slice', () => {
   });
 });
 
-describe.only('splitEvery', () => {
+describe('splitEvery', () => {
   it('splits a collection into slices of the specified length', () => {
     expect(splitEvery(1, [1, 2, 3, 4])).toEqual([[1], [2], [3], [4]]);
     expect(splitEvery(2, [1, 2, 3, 4])).toEqual([[1, 2], [3, 4]]);
