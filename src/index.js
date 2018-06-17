@@ -23,7 +23,6 @@ function unnest() {
 
 function uniq(input) {
   const resultSet = new Set(input);
-  console.log(resultSet);
   return Array.from(resultSet);
 }
 
@@ -34,8 +33,9 @@ function uniq(input) {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(arr1, arr2) {
+  const result = Array.from(new Set(arr1.concat(arr2)));
+  return result;
 }
 
 /** Q4.
@@ -68,8 +68,20 @@ function uncurryN() {
  *      R.type(undefined); //=> "Undefined"
  */
 
-function type() {
+function type(args) {
+  if (Array.isArray(args)) {
+    return 'Array';
+  }
+  if (args === null) {
+    return 'Null';
+  }
+  const string = `${args}`;
+  if (string.charAt(0) === '/' && string.charAt(string.length - 1)) {
+    return 'RegExp';
+  }
 
+  const type1 = typeof args;
+  return (type1.charAt(0).toUpperCase() + type1.slice(1));
 }
 
 /** Q6. (*)
@@ -79,7 +91,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -261,7 +273,27 @@ function kungfoo(input) {
  */
 
 function cipher(str) {
-  return str;
+  const ArrayOfString = str.split('');
+  const cypheredArray = ArrayOfString.map((val) => {
+    let char = val;
+    if ((val.charCodeAt(0) > 64 && val.charCodeAt(0) < 91) ||
+      (val.charCodeAt(0) > 96 && val.charCodeAt(0) < 123)) {
+      // if (val.charCodeAt(0) % 2 === 0 && (val.charCodeAt(0) < 117 || val.charCodeAt(0) < 85)) {
+      //   char = String.fromCharCode(val.charCodeAt(0) + 6);
+      // } else {
+      //   char = String.fromCharCode(val.charCodeAt(0) + (6 - 26));
+      // }
+      if (val.charCodeAt(0) % 2 === 0) {
+        if (val > 'u' || val > 'U') {
+          char = String.fromCharCode(val.charCodeAt(0) + (6 - 26));
+        } else {
+          char = String.fromCharCode(val.charCodeAt(0) + 6);
+        }
+      }
+    }
+    return char;
+  });
+  return cypheredArray.join('');
 }
 
 /** Q13. (*)
