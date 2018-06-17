@@ -21,8 +21,9 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(input) {
+  const resultSet = new Set(input);
+  return Array.from(resultSet);
 }
 
 /** Q3. (*)
@@ -32,8 +33,9 @@ function uniq() {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(arr1, arr2) {
+  const result = Array.from(new Set(arr1.concat(arr2)));
+  return result;
 }
 
 /** Q4.
@@ -66,8 +68,20 @@ function uncurryN() {
  *      R.type(undefined); //=> "Undefined"
  */
 
-function type() {
+function type(args) {
+  if (Array.isArray(args)) {
+    return 'Array';
+  }
+  if (args === null) {
+    return 'Null';
+  }
+  const string = `${args}`;
+  if (string.charAt(0) === '/' && string.charAt(string.length - 1)) {
+    return 'RegExp';
+  }
 
+  const type1 = typeof args;
+  return (type1.charAt(0).toUpperCase() + type1.slice(1));
 }
 
 /** Q6. (*)
@@ -77,7 +91,7 @@ function type() {
  */
 
 function toUpper1(params) {
-  return params;
+  return params.toUpperCase();
 }
 
 /** Q7.
@@ -205,7 +219,27 @@ function sumable(input) {
  */
 
 function kungfoo(input) {
-  return input;
+  if (input.n === 0) {
+    const result = input.x + input.y;
+    return result;
+  }
+  if (input.y === 0) {
+    return input.x;
+  }
+  return kungfoo({
+    n: input.n - 1,
+    x: kungfoo({
+      n: input.n,
+      x: input.x,
+      y: input.y - 1,
+    }),
+    y: (kungfoo({
+      n: input.n,
+      x: input.x,
+      y: input.y - 1,
+    }) + input.y),
+
+  });
 }
 
 /** Q12. (*)
@@ -239,7 +273,27 @@ function kungfoo(input) {
  */
 
 function cipher(str) {
-  return str;
+  const ArrayOfString = str.split('');
+  const cypheredArray = ArrayOfString.map((val) => {
+    let char = val;
+    if ((val.charCodeAt(0) > 64 && val.charCodeAt(0) < 91) ||
+      (val.charCodeAt(0) > 96 && val.charCodeAt(0) < 123)) {
+      // if (val.charCodeAt(0) % 2 === 0 && (val.charCodeAt(0) < 117 || val.charCodeAt(0) < 85)) {
+      //   char = String.fromCharCode(val.charCodeAt(0) + 6);
+      // } else {
+      //   char = String.fromCharCode(val.charCodeAt(0) + (6 - 26));
+      // }
+      if (val.charCodeAt(0) % 2 === 0) {
+        if (val > 'u' || val > 'U') {
+          char = String.fromCharCode(val.charCodeAt(0) + (6 - 26));
+        } else {
+          char = String.fromCharCode(val.charCodeAt(0) + 6);
+        }
+      }
+    }
+    return char;
+  });
+  return cypheredArray.join('');
 }
 
 /** Q13. (*)
@@ -266,8 +320,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(start, end, input) {
+  return input.slice(start, end);
 }
 
 
@@ -294,13 +348,25 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let counter = 1;
+  while (counter <= 5) {
+    yield counter;
+    counter += 1;
+  }
 }
 
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
     // implement fibonacci
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const c = a + b;
+      yield c;
+      a = b;
+      b = c;
+    }
   },
 };
 
