@@ -7,8 +7,17 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
-
+function unnest(arr) {
+  let finalArr = arr;
+  if (!Array.isArray(arr)) {
+    finalArr = Array.from(arr);
+  }
+  return finalArr.reduce((acc, item) => {
+    if (typeof item[Symbol.iterator] === 'function') {
+      return [...acc, ...item];
+    }
+    return [...acc, item];
+  }, []);
 }
 
 
@@ -21,8 +30,8 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(arr) {
+  return Array.from(new Set(arr));
 }
 
 /** Q3. (*)
@@ -249,8 +258,19 @@ function cipher(str) {
  *     splitEvery(3, 'foobarbaz'); //=> ['foo', 'bar', 'baz']
  */
 
-function splitEvery(n, list) {
-  return n + list;
+function splitEvery(chunk, list) {
+  if (list.length > 0) {
+    return [...list].reduce((resultArray, item, index) => {
+      const chunkIndex = Math.floor(index / chunk);
+      const tempArray = resultArray;
+      if (!tempArray[chunkIndex]) {
+        tempArray[chunkIndex] = [];
+      }
+      tempArray[chunkIndex].push(item);
+      return tempArray;
+    }, []);
+  }
+  return list;
 }
 
 
@@ -266,8 +286,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(fromIndex, toIndex, arr) {
+  return arr.slice(fromIndex, toIndex);
 }
 
 
@@ -286,7 +306,9 @@ function slice(input) {
  */
 
 function searchSortedMatrix(input) {
-  return input;
+  const { search, matrix } = input;
+  const linearArray = matrix.reduce((final, item) => [...final, ...item], []);
+  return !!linearArray.find(item => item === search);
 }
 
 /* Q16 (*)
@@ -294,13 +316,28 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
 }
 
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
-    // implement fibonacci
+    let a = 1;
+    let b = 1;
+    let c = a + b;
+    yield b;
+    yield c;
+
+    while (true) {
+      a = b;
+      b = c;
+      c = a + b;
+      yield c;
+    }
   },
 };
 
