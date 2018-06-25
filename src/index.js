@@ -7,8 +7,17 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
-
+function unnest(arr) {
+  let finalArr = arr;
+  if (!Array.isArray(arr)) {
+    finalArr = Array.from(arr);
+  }
+  return finalArr.reduce((acc, item) => {
+    if (typeof item[Symbol.iterator] === 'function') {
+      return [...acc, ...item];
+    }
+    return [...acc, item];
+  }, []);
 }
 
 
@@ -21,8 +30,8 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(arr) {
+  return Array.from(new Set(arr));
 }
 
 /** Q3. (*)
