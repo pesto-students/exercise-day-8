@@ -8,7 +8,11 @@
  */
 
 function xprod(arr1, arr2) {
-  return arr1 + arr2;
+  let ret = [];
+  arr1.forEach((elem) => {
+    ret = ret.concat(arr2.map(elem2 => [elem, elem2]));
+  });
+  return ret;
 }
 
 /**
