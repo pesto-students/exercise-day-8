@@ -93,7 +93,18 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(obj) {
+  const handler = {
+    get(object, prop) {
+      if (Reflect.has(object, prop)) {
+        return Reflect.get(object, prop);
+      }
+      throw new TypeError('Unknown property');
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
