@@ -73,7 +73,30 @@ function onChange(obj, cb) {
   x.i;
   //=> 8
 */
-const proxyIterable = () => { };
+const proxyIterable = (iterable) => {
+  const handler = {
+    get(target, key) {
+      return (...args) => {
+        const ret = [];
+        let idx = 0;
+
+        // eslint-disable-next-line
+        for (const elem of target) {
+          try {
+            ret.push(elem[key](...args));
+          } catch (e) {
+            throw new Error(`Item ${idx + 1} of the iterable is missing the ${key}() method`);
+          }
+
+          idx += 1;
+        }
+        return ret;
+      };
+    },
+  };
+
+  return new Proxy(iterable, handler);
+};
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
   const obj = {foo: true};
