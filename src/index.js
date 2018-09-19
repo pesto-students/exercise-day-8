@@ -7,8 +7,10 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
-
+function unnest(arr) {
+  // return arr.flat();
+  // handle array-like objects too
+  return arr.reduce((acc, val) => acc.concat(val), []);
 }
 
 
@@ -21,8 +23,11 @@ function unnest() {
  *   uniq([[42], [42]]); //=> [[42]]
  */
 
-function uniq() {
-
+function uniq(arr) {
+  // checking length is not working
+  const s = new Set();
+  arr.forEach(el => s.add(el));
+  return [...s];
 }
 
 /** Q3. (*)
@@ -32,8 +37,16 @@ function uniq() {
  *      R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
  */
 
-function union() {
-
+function union(a1, a2) {
+  // checking length of [0],[-0] is to be 2
+  /* const s = new Set();
+  a1.forEach(el => s.add(el));
+  a2.forEach(el => s.add(el));
+  return [...s];
+  */
+  // 0 and -0
+  const a3 = a1.concat(a2);
+  return a3.filter((x, y) => a3.indexOf(x) === y);
 }
 
 /** Q4.
@@ -66,8 +79,25 @@ function uncurryN() {
  *      R.type(undefined); //=> "Undefined"
  */
 
-function type() {
-
+function type(args) {
+  // if (typeof args === 'undefined')
+  if (args === null) {
+    return 'Null';
+  }
+  switch (typeof args) {
+    // case 'object' : if (obj instance)
+    case 'object': if (args instanceof Array) {
+      return 'Array';
+    } else if (args instanceof RegExp) {
+      return 'RegExp';
+    }
+      return 'Object';
+    case 'undefined': return 'Undefined';
+    case 'boolean': return 'Boolean';
+    case 'number': return 'Number';
+    case 'string': return 'String';
+    default: return 'RegExp';
+  }
 }
 
 /** Q6. (*)
