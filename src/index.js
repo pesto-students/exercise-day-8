@@ -107,9 +107,10 @@ function negativeIndex(arr) {
     // eslint-disable-next-line
     get: (target, key) => {
       if (key < 0) {
-        return target[Number(3 + Number(key))];
+        const test = Number(3 + Number(key));
+        return Reflect.get(target, test);
       }
-      return target[key];
+      return Reflect.get(target, key);
       // let x = Number(key);
     },
     set: (target, key, value) => {
@@ -128,7 +129,18 @@ function negativeIndex(arr) {
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(obj, def) {
+  const handler = {
+    get: (target, key) => {
+      if (key in target) {
+        return Reflect.get(target, key);
+      }
+      return def;
+    },
+  };
+  const proxy = new Proxy(obj, handler);
+  return proxy;
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
