@@ -304,7 +304,15 @@ function* generatorIterable() {
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
-    // implement fibonacci
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const next = a + b;
+      yield next;
+
+      a = b;
+      b = next;
+    }
   },
 };
 
