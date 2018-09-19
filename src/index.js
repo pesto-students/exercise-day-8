@@ -285,8 +285,32 @@ function slice(input) {
  * The goal is to search as efficiently as possible, fewest statements executed.
  */
 
-function searchSortedMatrix(input) {
-  return input;
+// returns the index of
+//   elem (if found), OR
+//   largest element in arr smaller than elem (if approxFlag set and elem not in arr), OR
+//   undefined (if 1) approxFlag not set, and elem not in arr, OR
+//                 2) approxFlag set and all elems of arr are larger than elem)
+function binarySearch(arr, elem, lIdx, rIdx, approxFlag) {
+  if (lIdx > rIdx) return undefined;
+
+  const midIdx = Math.floor((lIdx + rIdx) / 2);
+  if (elem === arr[midIdx] ||
+    (approxFlag && arr[midIdx] < elem && (midIdx === rIdx || arr[midIdx + 1] > elem))) {
+    return midIdx;
+  }
+
+  if (arr[midIdx] < elem) return binarySearch(arr, elem, lIdx + 1, rIdx, approxFlag);
+  return binarySearch(arr, elem, lIdx, rIdx - 1, approxFlag);
+}
+
+function searchSortedMatrix({ search, matrix }) {
+  const firstElems = matrix.map(arr => arr[0]);
+
+  const rowIdx = binarySearch(firstElems, search, 0, firstElems.length - 1, true);
+
+  if (rowIdx === undefined) return false;
+
+  return binarySearch(matrix[rowIdx], search, 0, matrix[rowIdx].length - 1, false) !== undefined;
 }
 
 /* Q16 (*)
