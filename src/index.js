@@ -7,10 +7,23 @@
  *   unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
  */
 
-function unnest() {
+function unnest(array) {
+  let arrayValues = array;
+  if (!Array.isArray(array)) {
+    arrayValues = Array.from(array);
+  }
 
+  const unsetArray = arrayValues.reduce((acc, value) => {
+    if (Array.isArray(value)) {
+      acc.push(...value);
+    } else {
+      acc.push(value);
+    }
+    return acc;
+  }, []);
+
+  return unsetArray;
 }
-
 
 /** Q2. (*)
  * Returns a new list containing only one copy of each element in the original
