@@ -250,7 +250,13 @@ function cipher(str) {
  */
 
 function splitEvery(n, list) {
-  return n + list;
+  if (n <= 0) throw new Error('n must be positive');
+
+  const ret = [];
+  for (let i = 0; i < list.length; i += n) {
+    ret.push(list.slice(i, i + n));
+  }
+  return ret;
 }
 
 
