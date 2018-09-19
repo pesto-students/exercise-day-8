@@ -239,7 +239,43 @@ function kungfoo(input) {
  */
 
 function cipher(str) {
-  return str;
+  const a = 'a'.charCodeAt(0);
+  const A = 'A'.charCodeAt(0);
+
+  function rotateLowerCaseChar(ch, n) {
+    return String.fromCharCode((((ch.charCodeAt(0) - a) + n) % 26) + a);
+  }
+
+  function shiftLowerCaseChar(ch) {
+    let shiftBy;
+
+    if ((ch.charCodeAt(0) - a) % 2 === 0) shiftBy = 4;
+    else shiftBy = 6;
+
+    return rotateLowerCaseChar(ch, shiftBy);
+  }
+
+  function isLowerCase(ch) {
+    return ch.charCodeAt(0) >= a && ch.charCodeAt(0) < a + 26;
+  }
+
+  function isUpperCase(ch) {
+    return ch.charCodeAt(0) >= A && ch.charCodeAt(0) < A + 26;
+  }
+
+  let ret = '';
+  for (let i = 0; i < str.length; i += 1) {
+    if (!(isLowerCase(str[i]) || isUpperCase(str[i]))) {
+      ret += str[i];
+    } else {
+      let translatedChar = shiftLowerCaseChar(str[i].toLowerCase());
+      translatedChar = isUpperCase(str[i]) ? translatedChar.toUpperCase() : translatedChar;
+
+      ret += translatedChar;
+    }
+  }
+
+  return ret;
 }
 
 /** Q13. (*)
