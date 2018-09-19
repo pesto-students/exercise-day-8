@@ -21,7 +21,40 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(target, handler) {
+  const proxies = new WeakSet();
+
+  const proxyHandler = {
+    set(obj, prop, value) {
+      handler();
+      return Reflect.set(obj, prop, value);
+    },
+
+    get(object, key) {
+      const value = Reflect.get(object, key);
+
+      if (typeof value === 'object' && !proxies.has(value)) {
+        const proxyObj = new Proxy(value, proxyHandler);
+        proxies.add(proxyObj);
+        return proxyObj;
+      }
+
+      return Reflect.get(object, key);
+    },
+
+    defineProperty() {
+      handler();
+      return true;
+    },
+
+    deleteProperty() {
+      handler();
+      return true;
+    },
+  };
+
+  return new Proxy(target, proxyHandler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
