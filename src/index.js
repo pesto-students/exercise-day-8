@@ -21,7 +21,40 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(target, handler) {
+  const proxies = new WeakSet();
+
+  const proxyHandler = {
+    set(obj, prop, value) {
+      handler();
+      return Reflect.set(obj, prop, value);
+    },
+
+    get(object, key) {
+      const value = Reflect.get(object, key);
+
+      if (typeof value === 'object' && !proxies.has(value)) {
+        const proxyObj = new Proxy(value, proxyHandler);
+        proxies.add(proxyObj);
+        return proxyObj;
+      }
+
+      return Reflect.get(object, key);
+    },
+
+    defineProperty() {
+      handler();
+      return true;
+    },
+
+    deleteProperty() {
+      handler();
+      return true;
+    },
+  };
+
+  return new Proxy(target, proxyHandler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -60,7 +93,18 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(obj) {
+  const handler = {
+    get(object, prop) {
+      if (Reflect.has(object, prop)) {
+        return Reflect.get(object, prop);
+      }
+      throw new TypeError('Unknown property');
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
@@ -69,7 +113,43 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex(arr) {
+  if (!Array.isArray(arr)) {
+    throw new TypeError('Only arrays are supported');
+  }
+
+  const handler = {
+    set(object, prop, value) {
+      let index = prop;
+      if (typeof prop === 'symbol') {
+        index = prop.valueOf();
+      } else {
+        index = Number(prop);
+      }
+
+      if (index < 0) {
+        return Reflect.set(object, object.length + index, value);
+      }
+      return Reflect.set(object, prop, value);
+    },
+
+    get(object, prop) {
+      let index = prop;
+      if (typeof prop === 'symbol') {
+        index = prop.valueOf();
+      } else {
+        index = Number(prop);
+      }
+
+      if (index < 0) {
+        return Reflect.get(object, object.length + index);
+      }
+      return Reflect.get(object, prop);
+    },
+  };
+
+  return new Proxy(arr, handler);
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
@@ -78,7 +158,18 @@ function negativeIndex() {}
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(obj, defaultValue) {
+  const handler = {
+    get(object, prop) {
+      if (Reflect.has(object, prop)) {
+        return Reflect.get(object, prop);
+      }
+      return defaultValue;
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
@@ -90,7 +181,22 @@ function setDefaultProperty() {}
     getOwnPropertyDescriptor
     traps in handler
 */
-function privateProps() {}
+function privateProps(obj, privacyFilter) {
+  const handler = {
+    get(object, prop) {
+      if (privacyFilter(prop)) {
+        return undefined;
+      }
+      return Reflect.get(object, prop);
+    },
+
+    ownKeys(object) {
+      return Reflect.ownKeys(object).filter(key => !privacyFilter(key));
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 module.exports = {
   onChange,
