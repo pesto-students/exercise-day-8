@@ -21,7 +21,34 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(obj, cb) {
+  const handler = {
+    set(target, key, value) {
+      cb();
+      Reflect.set(target, key, value);
+      return true;
+    },
+    defineProperty(target, key, descriptor) {
+      cb();
+      Object.defineProperty(target, key, descriptor);
+      return target;
+    },
+    deleteProperty(target, key) {
+      cb();
+      Reflect.deleteProperty(target, key);
+      return true;
+    },
+  };
+
+  const keys = Object.keys(obj);
+  for (let i = 0; i < keys.length; i += 1) {
+    if (typeof obj[keys[i]] === 'object') {
+      Reflect.set(obj, keys[i], onChange(obj[keys[i]], cb));
+    }
+  }
+
+  return new Proxy(obj, handler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -46,7 +73,7 @@ function onChange() {}
   x.i;
   //=> 8
 */
-const proxyIterable = () => {};
+const proxyIterable = () => { };
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
   const obj = {foo: true};
@@ -60,7 +87,7 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp() { }
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
@@ -69,7 +96,7 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex() { }
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
@@ -78,7 +105,7 @@ function negativeIndex() {}
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty() { }
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
@@ -90,7 +117,7 @@ function setDefaultProperty() {}
     getOwnPropertyDescriptor
     traps in handler
 */
-function privateProps() {}
+function privateProps() { }
 
 module.exports = {
   onChange,
