@@ -129,7 +129,35 @@ function knownProp(obj) {
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() { }
+function negativeIndex(arr) {
+  if (!Array.isArray(arr)) {
+    throw new TypeError('Only arrays are supported');
+  }
+
+  function getActualIndex(n, arrLen) {
+    let idx = n % arrLen;
+    if (idx < 0) idx += arrLen;
+    return idx;
+  }
+
+  const handler = {
+    get(target, key) {
+      let k;
+      if (typeof key === 'symbol' || Number.isNaN(+key)) {
+        k = key;
+      } else {
+        k = getActualIndex(Number(key), target.length);
+      }
+      return Reflect.get(target, k);
+    },
+    set(target, key, value) {
+      const k = getActualIndex(Number(key), target.length);
+      Reflect.set(target, k, value);
+      return true;
+    },
+  };
+  return new Proxy(arr, handler);
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
