@@ -266,8 +266,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(fromIdx, toIdx, input) {
+  return input.slice(fromIdx, toIdx);
 }
 
 
