@@ -107,7 +107,15 @@ function type(args) {
  */
 
 function toUpper1(params) {
-  return params;
+  let newStr = '';
+  for (let i = 0; i < params.length; i += 1) {
+    let code = params.charCodeAt(i);
+    if (code > 96 && code < 123) {
+      code -= 32;
+    }
+    newStr += String.fromCharCode(code);
+  }
+  return newStr;
 }
 
 /** Q7.
