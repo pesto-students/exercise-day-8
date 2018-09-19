@@ -56,8 +56,13 @@ function valuesIn(obj) {
  *   values({a: 1, b: 2, c: 3}); //=> [1, 2, 3]
  */
 
-function values() {
-
+function values(obj) {
+  const keys = Reflect.ownKeys(obj);
+  const ret = [];
+  for (let i = 0; i < keys.length; i += 1) {
+    ret.push(obj[keys[i]]);
+  }
+  return ret;
 }
 
 /**
