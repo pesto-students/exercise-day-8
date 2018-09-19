@@ -158,7 +158,18 @@ function negativeIndex(arr) {
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(obj, defaultValue) {
+  const handler = {
+    get(object, prop) {
+      if (Reflect.has(object, prop)) {
+        return Reflect.get(object, prop);
+      }
+      return defaultValue;
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
