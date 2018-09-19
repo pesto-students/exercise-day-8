@@ -39,8 +39,12 @@ function without() {
  *      R.valuesIn(f); //=> ['X', 'Y']
  */
 
-function valuesIn() {
+function valuesIn(obj) {
+  const ret = [];
 
+  // eslint-disable-next-line
+  for (const key in obj) ret.push(obj[key]);
+  return ret;
 }
 
 /**
