@@ -8,7 +8,11 @@
  */
 
 function xprod(arr1, arr2) {
-  return arr1 + arr2;
+  let ret = [];
+  arr1.forEach((elem) => {
+    ret = ret.concat(arr2.map(elem2 => [elem, elem2]));
+  });
+  return ret;
 }
 
 /**
@@ -35,8 +39,12 @@ function without() {
  *      R.valuesIn(f); //=> ['X', 'Y']
  */
 
-function valuesIn() {
+function valuesIn(obj) {
+  const ret = [];
 
+  // eslint-disable-next-line
+  for (const key in obj) ret.push(obj[key]);
+  return ret;
 }
 
 /**
@@ -48,8 +56,13 @@ function valuesIn() {
  *   values({a: 1, b: 2, c: 3}); //=> [1, 2, 3]
  */
 
-function values() {
-
+function values(obj) {
+  const keys = Reflect.ownKeys(obj);
+  const ret = [];
+  for (let i = 0; i < keys.length; i += 1) {
+    ret.push(obj[keys[i]]);
+  }
+  return ret;
 }
 
 /**

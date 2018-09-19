@@ -21,7 +21,34 @@
   watchedObject.a.b[0].c = true;
   //=> 'Object changed: 2'
 */
-function onChange() {}
+function onChange(obj, cb) {
+  const handler = {
+    set(target, key, value) {
+      cb();
+      Reflect.set(target, key, value);
+      return true;
+    },
+    defineProperty(target, key, descriptor) {
+      cb();
+      Object.defineProperty(target, key, descriptor);
+      return target;
+    },
+    deleteProperty(target, key) {
+      cb();
+      Reflect.deleteProperty(target, key);
+      return true;
+    },
+  };
+
+  const keys = Object.keys(obj);
+  for (let i = 0; i < keys.length; i += 1) {
+    if (typeof obj[keys[i]] === 'object') {
+      Reflect.set(obj, keys[i], onChange(obj[keys[i]], cb));
+    }
+  }
+
+  return new Proxy(obj, handler);
+}
 
 /* Q2: Use ES6 Proxy to implement the following function
   Call a method on an iterable to call it on all items of the iterable
@@ -46,7 +73,30 @@ function onChange() {}
   x.i;
   //=> 8
 */
-const proxyIterable = () => {};
+const proxyIterable = (iterable) => {
+  const handler = {
+    get(target, key) {
+      return (...args) => {
+        const ret = [];
+        let idx = 0;
+
+        // eslint-disable-next-line
+        for (const elem of target) {
+          try {
+            ret.push(elem[key](...args));
+          } catch (e) {
+            throw new Error(`Item ${idx + 1} of the iterable is missing the ${key}() method`);
+          }
+
+          idx += 1;
+        }
+        return ret;
+      };
+    },
+  };
+
+  return new Proxy(iterable, handler);
+};
 
 /* Q3: Use ES6 Proxy to implement the following function (*)
   const obj = {foo: true};
@@ -60,7 +110,17 @@ const proxyIterable = () => {};
   console.log(obj2.bar);
   //=> [TypeError] Unknown property: bar
 */
-function knownProp() {}
+function knownProp(obj) {
+  const handler = {
+    get(target, key) {
+      if (!Reflect.has(target, key)) {
+        throw new TypeError(`Unknown property: ${key}`);
+      }
+      return target[key];
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 /* Q4: Use ES6 Proxy to support negative index in array (*)
 
@@ -69,7 +129,35 @@ function knownProp() {}
   console.log(unicorn[-1]);
   //=> 'rainbow' (gets the 1st element from last)
 */
-function negativeIndex() {}
+function negativeIndex(arr) {
+  if (!Array.isArray(arr)) {
+    throw new TypeError('Only arrays are supported');
+  }
+
+  function getActualIndex(n, arrLen) {
+    let idx = n % arrLen;
+    if (idx < 0) idx += arrLen;
+    return idx;
+  }
+
+  const handler = {
+    get(target, key) {
+      let k;
+      if (typeof key === 'symbol' || Number.isNaN(+key)) {
+        k = key;
+      } else {
+        k = getActualIndex(Number(key), target.length);
+      }
+      return Reflect.get(target, k);
+    },
+    set(target, key, value) {
+      const k = getActualIndex(Number(key), target.length);
+      Reflect.set(target, k, value);
+      return true;
+    },
+  };
+  return new Proxy(arr, handler);
+}
 
 /* Q5: Use ES6 Proxy to get a default property if a non-existing
   property is accessed.
@@ -78,7 +166,15 @@ function negativeIndex() {}
   myObj.foo // bar
   myObj.xyz // default
 */
-function setDefaultProperty() {}
+function setDefaultProperty(obj, defaultVal) {
+  const handler = {
+    get(target, key) {
+      if (Reflect.has(target, key)) return target[key];
+      return defaultVal;
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 /* Q6: Use ES6 Proxy to hide private properties of an object.
   See test cases for further info.
@@ -90,7 +186,25 @@ function setDefaultProperty() {}
     getOwnPropertyDescriptor
     traps in handler
 */
-function privateProps() {}
+function privateProps(obj, privacyFilter) {
+  const handler = {
+    set(target, key, value) {
+      if (privacyFilter(key)) {
+        throw new TypeError(`Can't set property "${key}"`);
+      }
+
+      Reflect.set(target, key, value);
+      return true;
+    },
+    has(target, key) {
+      return !privacyFilter(key) && Reflect.has(target, key);
+    },
+    ownKeys(target) {
+      return Reflect.ownKeys(target).filter(k => !privacyFilter(k));
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 module.exports = {
   onChange,
