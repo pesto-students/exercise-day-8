@@ -181,7 +181,22 @@ function setDefaultProperty(obj, defaultValue) {
     getOwnPropertyDescriptor
     traps in handler
 */
-function privateProps() {}
+function privateProps(obj, privacyFilter) {
+  const handler = {
+    get(object, prop) {
+      if (privacyFilter(prop)) {
+        return undefined;
+      }
+      return Reflect.get(object, prop);
+    },
+
+    ownKeys(object) {
+      return Reflect.ownKeys(object).filter(key => !privacyFilter(key));
+    },
+  };
+
+  return new Proxy(obj, handler);
+}
 
 module.exports = {
   onChange,
