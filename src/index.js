@@ -204,8 +204,15 @@ function sumable(input) {
  * output: Integer as defined above.
  */
 
-function kungfoo(input) {
-  return input;
+function kungfoo({ n, x, y }) {
+  if (n === 0 || y === 0) return x + y;
+
+  const tmp = kungfoo({ n, x, y: y - 1 });
+  return kungfoo({
+    n: n - 1,
+    x: tmp,
+    y: tmp + y,
+  });
 }
 
 /** Q12. (*)
@@ -239,7 +246,43 @@ function kungfoo(input) {
  */
 
 function cipher(str) {
-  return str;
+  const a = 'a'.charCodeAt(0);
+  const A = 'A'.charCodeAt(0);
+
+  function rotateLowerCaseChar(ch, n) {
+    return String.fromCharCode((((ch.charCodeAt(0) - a) + n) % 26) + a);
+  }
+
+  function shiftLowerCaseChar(ch) {
+    let shiftBy;
+
+    if ((ch.charCodeAt(0) - a) % 2 === 0) shiftBy = 4;
+    else shiftBy = 6;
+
+    return rotateLowerCaseChar(ch, shiftBy);
+  }
+
+  function isLowerCase(ch) {
+    return ch.charCodeAt(0) >= a && ch.charCodeAt(0) < a + 26;
+  }
+
+  function isUpperCase(ch) {
+    return ch.charCodeAt(0) >= A && ch.charCodeAt(0) < A + 26;
+  }
+
+  let ret = '';
+  for (let i = 0; i < str.length; i += 1) {
+    if (!(isLowerCase(str[i]) || isUpperCase(str[i]))) {
+      ret += str[i];
+    } else {
+      let translatedChar = shiftLowerCaseChar(str[i].toLowerCase());
+      translatedChar = isUpperCase(str[i]) ? translatedChar.toUpperCase() : translatedChar;
+
+      ret += translatedChar;
+    }
+  }
+
+  return ret;
 }
 
 /** Q13. (*)
@@ -250,7 +293,13 @@ function cipher(str) {
  */
 
 function splitEvery(n, list) {
-  return n + list;
+  if (n <= 0) throw new Error('n must be positive');
+
+  const ret = [];
+  for (let i = 0; i < list.length; i += n) {
+    ret.push(list.slice(i, i + n));
+  }
+  return ret;
 }
 
 
@@ -266,8 +315,8 @@ function splitEvery(n, list) {
  *    slice(0, 3, 'ramda');                     //=> 'ram'
  */
 
-function slice(input) {
-  return input;
+function slice(fromIdx, toIdx, input) {
+  return input.slice(fromIdx, toIdx);
 }
 
 
@@ -285,8 +334,32 @@ function slice(input) {
  * The goal is to search as efficiently as possible, fewest statements executed.
  */
 
-function searchSortedMatrix(input) {
-  return input;
+// returns the index of
+//   elem (if found), OR
+//   largest element in arr smaller than elem (if approxFlag set and elem not in arr), OR
+//   undefined (if 1) approxFlag not set, and elem not in arr, OR
+//                 2) approxFlag set and all elems of arr are larger than elem)
+function binarySearch(arr, elem, lIdx, rIdx, approxFlag) {
+  if (lIdx > rIdx) return undefined;
+
+  const midIdx = Math.floor((lIdx + rIdx) / 2);
+  if (elem === arr[midIdx] ||
+    (approxFlag && arr[midIdx] < elem && (midIdx === rIdx || arr[midIdx + 1] > elem))) {
+    return midIdx;
+  }
+
+  if (arr[midIdx] < elem) return binarySearch(arr, elem, lIdx + 1, rIdx, approxFlag);
+  return binarySearch(arr, elem, lIdx, rIdx - 1, approxFlag);
+}
+
+function searchSortedMatrix({ search, matrix }) {
+  const firstElems = matrix.map(arr => arr[0]);
+
+  const rowIdx = binarySearch(firstElems, search, 0, firstElems.length - 1, true);
+
+  if (rowIdx === undefined) return false;
+
+  return binarySearch(matrix[rowIdx], search, 0, matrix[rowIdx].length - 1, false) !== undefined;
 }
 
 /* Q16 (*)
@@ -294,13 +367,25 @@ Create an iterable using generator function.
 It should have the same functionality as the one in question 1
 */
 function* generatorIterable() {
-  yield 'abc';
+  let i = 1;
+  while (i <= 5) {
+    yield i;
+    i += 1;
+  }
 }
 
 // Q16 (*)
 const fibonacci = {
   * [Symbol.iterator]() {
-    // implement fibonacci
+    let a = 0;
+    let b = 1;
+    while (true) {
+      const next = a + b;
+      yield next;
+
+      a = b;
+      b = next;
+    }
   },
 };
 
