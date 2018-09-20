@@ -204,8 +204,15 @@ function sumable(input) {
  * output: Integer as defined above.
  */
 
-function kungfoo(input) {
-  return input;
+function kungfoo({ n, x, y }) {
+  if (n === 0 || y === 0) return x + y;
+
+  const tmp = kungfoo({ n, x, y: y - 1 });
+  return kungfoo({
+    n: n - 1,
+    x: tmp,
+    y: tmp + y,
+  });
 }
 
 /** Q12. (*)
